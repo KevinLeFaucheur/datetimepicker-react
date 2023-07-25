@@ -1,12 +1,12 @@
 import { useState } from "react";
-import  DatePicker from "./index"
+import DatePicker from "../../src";
 
 const App = () => {
   const [date, setDate] = useState();
+  console.log(date);
 
   return (
     <section>
-      <h1>{date}</h1>
       <DatePicker onChange={(value) => setDate(value)}/>
     </section>
   );
