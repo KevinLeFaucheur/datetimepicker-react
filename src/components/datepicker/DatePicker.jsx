@@ -7,16 +7,110 @@ import "./index.css";
 import { ScrollingContext } from "./ScrollingContext";
 
 /**
+ * Passing datepicker options as object
+ * @type {Object} options
+ * @property {boolean} save       - Should or not use a save button to confirm the selected date.
+ * @property {boolean} timepicker - Should or not add a selection of hours.
+ * @property {string} locale      - Localization for the datepicker, defaults to lang attribute.
+ */
+const default_options = {
+  locale: document.documentElement.lang, 
+
+  saveSelected: false,
+  todayButton: true,
+
+  datepicker: true,
+  timepicker: false,
+  weeks: false,		
+  
+  highlightedDates: [],
+  highlightedPeriods: [], 
+}
+
+const timepicker_defaults = {
+  scrollbar: true,
+  allowTimes: [],
+}
+
+/**
  * 
  */
 export const DatePicker = ({ id, onChange, options }) => {
-  const [showDatePicker, setShowDatePicker] = useState(false);
+  /**
+   * Initializing variables with options if not null or default_options
+  */
+  const years = [options?.yearStart ?? 1950, options?.yearEnd ?? 2050].sort();
+  const yearsRange = range(years[0], years[1]);
+  
+  // Localization
+  const locale = options?.locale ?? default_options.locale;
+  const weekdays = options?.dayOfWeekShort ?? i18n[locale].dayOfWeekShort;
+  const months = options?.months ?? i18n[locale].months;
+  
+  // Controls & Buttons
+  const saveSelected = options?.saveSelected ?? default_options.saveSelected;
+  const todayButton = options?.todayButton ?? default_options.todayButton;
+  const prev = options?.inverseButton ? 1 : -1;
+  const next = options?.inverseButton ? -1 : 1;
+  
+  // Main features
+  const datepicker = options?.datepicker ?? default_options.datepicker;
+  const timepicker = options?.timepicker ?? default_options.timepicker;
+  const weeks = options?.weeks ?? default_options.weeks;
+  
+  // Default and clamping Date and Time  
+  let defaultDate = options?.defaultDate ?? false;
+  const startDate = options?.startDate ?? Date.now();
+  const minDate = options?.minDate ?? false;
+  const maxDate = options?.maxDate ?? false;
+  // const minDateTime = options?.minDateTime ?? false;
+  // const maxDateTime = options?.maxDateTime ?? false;
+  
+  // Select Class Dates
+  const highlightedDates = getHighlightedDates(options?.highlightedDates) || [];
+  const highlightedPeriods = getHighlightedPeriod(options?.highlightedPeriods, highlightedDates) || [];
+  const highlightedDays = [highlightedDates, highlightedPeriods].flat();
+
+  const selectClassesDates = {
+    highlightedDates: highlightedDates,
+    highlightedPeriods: highlightedPeriods,
+    highlightedDays: highlightedDays,
+    minMaxDates: [minDate, maxDate],
+    weekends: options?.weekends ? options.weekends.map(weekend => Date.parse(weekend)) : [],
+    disabledDates: options?.disabledDates ? options.disabledDates.map(date => Date.parse(date)) : [],
+    allowDates: options?.allowDates ? options.allowDates.map(date => Date.parse(date)) : [],
+    disabledWeekDays: options?.disabledWeekDays || [],
+  }
+
+  const theme = options?.theme ?? false; // 'dark' is supported
+  const opened = options?.opened ?? false;
+  
+  /**
+   * TimePicker Options
+   */ 
+  const timepicker_options = {
+    timepickerOnly: !datepicker,
+
+    inverseButton: options?.inverseButton ?? false,
+    scrollbar: options?.timepickerScrollbar ?? timepicker_defaults.scrollbar,
+
+    hours12: options?.hours12 ?? false,
+    step: options?.step ?? 60,
+    allowTimes: options?.allowTimes ?? timepicker_defaults.allowTimes,
+    defaultTime: options?.defaultTime ?? false,
+    minTime: options?.minTime ?? false,
+    maxTime: options?.maxTime ?? false,
+
+    theme: options?.theme ?? false,
+  }
+
+  const [showDatePicker, setShowDatePicker] = useState(opened);
   const [selectedDate, setSelectedDate] = useState({
-    date: new Date(Date.now()),
-    year: new Date(Date.now()).getFullYear(),
-    month: new Date(Date.now()).getMonth(),
-    day: new Date(Date.now()).getDate(),
-    time: new Date(Date.now()).getHours(),
+    date: new Date(startDate),
+    year: new Date(startDate).getFullYear(),
+    month: new Date(startDate).getMonth(),
+    day: new Date(startDate).getDate(),
+    time: new Date(startDate).getHours() + ':' + new Date(startDate).getMinutes(),
   });
   const [isScrolling, setIsScrolling] = useState(false);
   const [calendar, setCalendar] = useState([]);
@@ -31,71 +125,6 @@ export const DatePicker = ({ id, onChange, options }) => {
   };
 
   /**
-   * Passing datepicker options as object
-   * @type {Object} options
-   * @property {boolean} save       - Should or not use a save button to confirm the selected date.
-   * @property {boolean} timepicker - Should or not add a selection of hours.
-   * @property {string} locale      - Localization for the datepicker, defaults to lang attribute.
-   * }
-   */
-  const default_options = {
-    locale: document.documentElement.lang, 
-
-    saveSelected: false,
-    datepicker: true,
-    timepicker: false,
-    todayButton: true,
-
-    highlightedDates: [],
-    highlightedPeriods: [], 
-    weeks: false,
-  }
-
-  const timepicker_defaults = {
-    scrollbar: true,
-    allowTimes: [],
-  }
-
-  /**
-   * Initializing variables with options if not null or default_options
-   */
-  const years = [options?.yearStart ?? 1950, options?.yearEnd ?? 2050].sort();
-  const yearsRange = range(years[0], years[1]);
-  
-  // Localization
-  const locale = options?.locale ?? default_options.locale;
-  const weekdays = options?.dayOfWeekShort ?? i18n[locale].dayOfWeekShort;
-  const months = options?.months ?? i18n[locale].months;
-  
-  // Main features
-  const datepicker = options?.datepicker ?? default_options.datepicker;
-  const timepicker = options?.timepicker ?? default_options.timepicker;
-  const saveSelected = options?.saveSelected ?? default_options.saveSelected;
-  const todayButton = options?.todayButton ?? default_options.todayButton;
-  
-  // Controls
-  const prev = options?.inverseButton ? 1 : -1;
-  const next = options?.inverseButton ? -1 : 1;
-  
-  // Special Days
-  const highlightedDates = getHighlightedDates(options?.highlightedDates) || [];
-  const highlightedPeriods = getHighlightedPeriod(options?.highlightedPeriods, highlightedDates) || [];
-  const weekends = options?.weekends.map(weekend => Date.parse(weekend)) || [];
-  
-  const highlightedDays = [highlightedDates, highlightedPeriods].flat();
-  
-  const weeks = options?.weeks ?? default_options.weeks;
-
-  // TimePicker
-  const timepicker_options = {
-    scrollbar: options?.timepickerScrollbar ?? timepicker_defaults.scrollbar,
-    allowTimes: options?.allowTimes ?? timepicker_defaults.allowTimes,
-    inverseButton: options?.inverseButton ?? false,
-    hours12: options?.hours12 ?? false,
-    timepickerOnly: !datepicker,
-  }
-
-  /**
    * 
    */
   useEffect(() => {
@@ -105,11 +134,12 @@ export const DatePicker = ({ id, onChange, options }) => {
     }
 
     const date = new Date(selectedDate.year, selectedDate.month, selectedDate.day);
+
     setCalendar(calendarBuilder(date));
-    placeholderRef.current.innerText = (datepicker ? date.toLocaleDateString() : '') + (timepicker ? ' ' + selectedDate.time : '');   
+    placeholderRef.current.innerText = (datepicker ? date.toLocaleDateString() : '') + (timepicker ? ' ' + selectedDate.time : ''); 
     if(onChange) onChange(date.toLocaleDateString());
 
-  }, [onChange, selectedDate]);
+  }, [datepicker, onChange, selectedDate, timepicker])
 
   // 
   useEffect(() => {
@@ -162,6 +192,7 @@ export const DatePicker = ({ id, onChange, options }) => {
 
   // 
   const handleDateChange = (e) => {
+    if(e.target.classList.contains('disabled')) return;
 
     document
       .querySelectorAll(`#${id}-menu td`)
@@ -198,7 +229,7 @@ export const DatePicker = ({ id, onChange, options }) => {
     <div id={`${id}-container`} className="datepicker-container" ref={datepickerRef} data-date={new Date(selectedDate.year, selectedDate.month, selectedDate.day)}>  
       <div ref={inputRef} tabIndex={0} className="datepicker-input" onClick={handleInputClick} 
       role="combobox" aria-expanded="false" aria-haspopup="dialog" aria-controls="cb-dialog-1" aria-label={`${id}-date`}>
-        <div ref={placeholderRef} className="select-selected-value">DD/MM/YY</div>
+        <div ref={placeholderRef} className="select-selected-value">{new Date(defaultDate).toLocaleDateString()}</div>
         <div className="select-tools">
           <div className="select-tool">
             <Calendar />
@@ -206,14 +237,14 @@ export const DatePicker = ({ id, onChange, options }) => {
         </div>
       </div>  
       
-      {showDatePicker &&<div id={`${id}-menu`} className="datepicker-menu">
+      {showDatePicker &&<div id={`${id}-menu`} className={`datepicker-menu ${theme ? theme : ''}`}>
         {datepicker && <div className="datepicker-calendar">
           <nav className="datepicker-nav">
             <button type="button" onClick={() => handleMonthClick(prev)} className="datepicker-prev"><ThinLeft /></button>
             <button type="button" onClick={handleClickToday} className={`datepicker-today ${!todayButton ? 'hidden' : ''}`}><Home /></button>
 
             <select 
-              className="datepicker-month" 
+              className={`datepicker-month ${theme ? theme : ''}`} 
               value={selectedDate.month} 
               onChange={handleMonthChange}
               >
@@ -221,7 +252,7 @@ export const DatePicker = ({ id, onChange, options }) => {
             </select>
 
             <select 
-              className="datepicker-year" 
+              className={`datepicker-year ${theme ? theme : ''}`} 
               value={selectedDate.year} 
               onChange={handleYearChange}
               >
@@ -246,7 +277,7 @@ export const DatePicker = ({ id, onChange, options }) => {
                     { week.map(date => 
                       
                       <td 
-                        className={selectClass(new Date(selectedDate.year, selectedDate.month, selectedDate.day), date, highlightedDays, weekends)}
+                        className={selectClass(new Date(selectedDate.year, selectedDate.month, selectedDate.day), date, selectClassesDates)}
                         data-year={date.getFullYear()} data-month={date.getMonth()} data-day={date.getDate()} 
                         key={date.toLocaleDateString()} 
                         onClick={(e) => handleDateChange(e)}
@@ -318,12 +349,16 @@ const calendarBuilder = (date) => {
 /**
  * Adds the corresponding CSS class for :
  *  selected, greyed out, today and hightlighted dates
- * @param {Date} sDate  // current selected Date by user
- * @param {Date} tdDate // td Date to display in calendar
- * @returns 
+ * @param {Date} sDate    - current selected Date by user
+ * @param {Date} tdDate   - td Date to display in calendar
+ * @param {Object} dates  - td Date to display in calendar
+ * @returns {string}      - classNames for this td
  */
-const selectClass = (sDate, tdDate, arrayOfDates, weekends) => {
+const selectClass = (sDate, tdDate, dates) => {
   let className = [];
+  let [minDate, maxDate] = dates.minMaxDates; 
+  let minDateTimestamp = Date.parse(minDate);
+  let maxDateTimestamp = Date.parse(maxDate);
 
   if (sDate.getFullYear() === tdDate.getFullYear()
     && sDate.getMonth() === tdDate.getMonth()
@@ -335,7 +370,32 @@ const selectClass = (sDate, tdDate, arrayOfDates, weekends) => {
     className.push('greyed');
   }
 
-  if(tdDate.getDay() === 0 || tdDate.getDay() === 6 || weekends.includes(Date.parse(tdDate))) {
+  if(dates.disabledWeekDays.includes(tdDate.getDay())) {
+    className.push('disabled');
+  }
+
+  if(dates.disabledDates.includes(Date.parse(tdDate))) {
+    className.push('disabled');
+  }
+
+  if(minDateTimestamp !== false && Date.parse(tdDate) < minDateTimestamp) {
+    className.push('disabled');
+  }
+
+  if(maxDateTimestamp !== false && Date.parse(tdDate) > maxDateTimestamp) {
+    className.push('disabled');
+  }
+
+  if(dates.allowDates.length > 0) {
+    if(dates.allowDates.includes(Date.parse(tdDate))) {
+      className = className.filter(className => className !== 'disabled');
+    }
+    else {
+      className.push('disabled');
+    } 
+  }
+
+  if(tdDate.getDay() === 0 || tdDate.getDay() === 6 || dates.weekends.includes(Date.parse(tdDate))) {
     className.push('weekend');
   }
 
@@ -345,7 +405,7 @@ const selectClass = (sDate, tdDate, arrayOfDates, weekends) => {
     className.push('today');
   }
 
-  let dateFound = arrayOfDates.find(date => date.timestamp === Date.parse(tdDate));
+  let dateFound = dates.highlightedDates.find(date => date.timestamp === Date.parse(tdDate));
   if (dateFound) {
     if(dateFound.style) {
       dateFound.style.split(',').forEach(style => className.push(style));
