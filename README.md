@@ -10,40 +10,41 @@
 The project is about a new start-up bank, **HRNet**, which is trying to break into the industry and needs help setting up its app. We obtained a two-part contract which is broken down into a couple phases:
 
 ### 2. Getting Started with this repository
+
 1. Clone the repository:
 
-   ```sh
+```sh
 
    git clone https://github.com/KevinLeFaucheur/datetimepicker-react.git
 
-   ```
+```
 
 2. Change the current working directory to the cloned project location:
 
-   ```sh
+```sh
 
-   cd datetimepicker-react
+	cd datetimepicker-react
 
-   ```
+```
 
 3. Install NPM packages:
 
-   ```sh
+```sh
 
-   npm i
+	npm i
 
-   ```
+```
 
 4. Runs the app in the development mode:
 
-   ```sh
+```sh
 
-   npm start
+	npm start
 
-   ```
+```
 
-
-## II - Usage for another project
+---
+## II - Install and use the DateTimePicker component
 
 #### 1. NPM
 
