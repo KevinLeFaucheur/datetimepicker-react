@@ -165,13 +165,13 @@ The component can be installed as a **npm package** for a React application.
 |datepicker     |true |Enable date picking  | ```{ datepicker: false }``` |
 |weeks          |false |Show week number, left side of calendar | ```{ weeks: true }``` |
 |theme          |'' |className for alternate color theme, **dark** is supported | ```{ theme: 'dark' }```  |
-|minDate        |false |Minimum date enabled to pick | ```{ minDate: 0 }``` <br> ```{ minDate: '08/15/2023' }```<br> ```{ minDate: new Date() }``` |
-|maxDate        |false |Maximum date enbaled to pick | ```{ maxDate: 0 }``` <br> ```{ maxDate: '08/15/2023' }```<br> ```{ maxDate: new Date() }``` |
+|minDate        |false |Minimum date enabled to pick | ```{ minDate: '08/15/2023' }``` |
+|maxDate        |false |Maximum date enbaled to pick | ```{ maxDate: '08/15/2023' }``` |
 |startDate      |false | | ```{ startDate: '08/15/2023' }``` |
 |defaultDate    |false | | ```{ defaultDate: '08/15/2023' }``` |
 |defaultTime    |false | | ```{ defaultTime: '08/15/2023' }``` |
-|minTime        |false |Minimum time enabled to pick | ```{ minTime: 0 }``` <br> ```{ minTime: '06:00' }```<br> ```{ minTime: new Date() }``` |
-|maxTime        |false |Maximum time enabled to pick | ```{ maxTime: 0 }``` <br> ```{ maxTime: '21:00' }```<br> ```{ maxTime: new Date() }```  |
+|minTime        |false |Minimum time enabled to pick | ```{ minTime: '05:00' }``` |
+|maxTime        |false |Maximum time enabled to pick | ```{ maxTime: '21:00' }``` |
 |allowTimes     |[]    |Timepicker will only display these if set | ```{ allowTimes: ['06:00','12:00','18:00'] }```  |
 |opened         |false |Picker is opened by default when true | ```{ opened: true }``` |
 |inline         |false | | ```{ inline: true }``` |
@@ -186,6 +186,7 @@ The component can be installed as a **npm package** for a React application.
 |onClose             | | | ```{ onClose: () => { console.log('onClose') } }``` |
 |inverseButton       |false |Inverse month and time arrow buttons | ```{ inverseButton: true }``` |
 |scrollMonth         |true |Enable mouse wheel for scrolling months | ```{ scrollMonth: false }``` |
+|scrollTime          |true | | ```{ scrollTime: false }``` |
 |scrollInput         |true | | ```{ scrollInput: false }``` |
 |hours12             |false | | ```{ hours12: true }``` |
 |yearStart           |1950 |Start value for year select | ```{ yearStart: 1900 }``` |
