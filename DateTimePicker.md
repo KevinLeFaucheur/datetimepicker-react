@@ -18,18 +18,18 @@
 |step           |60         |timepicker steps, 0 < step <= 60 | ```{ step: 30 }```  |
 |closeOnDateSelect |false |Close picker when choosing a date | |
 |validateOnBlur |true | | |
-|timepicker     |false |Enable time picking |```{ timepicker: ** }``` |
-|datepicker     |true |Enable date picking  | |
+|timepicker     |false |Enable time picking |![[Code_2023-08-11_14-12-14.png]] |
+|datepicker     |true |Enable date picking  | ```{ datepicker: true }```  |
 |weeks          |false |Show week number, left side of calendar | |
-|theme          |'' |className for alternate color theme, **dark** is supported | |
-|minDate        |false |Minimum date enabled to pick | |
-|maxDate        |false |Maximum date enbaled to pick | |
-|startDate      |false | | |
-|defaultDate    |false | | |
-|defaultTime    |false | | |
-|minTime        |false |Minimum time enabled to pick | |
-|maxTime        |false |Maximum time enabled to pick | |
-|allowTimes     |[]    |Timepicker will only display these if set | |
+|theme          |'' |className for alternate color theme, **dark** is supported | ```{ timepicker: true }```  |
+|minDate        |false |Minimum date enabled to pick | ```{ timepicker: true }```  |
+|maxDate        |false |Maximum date enbaled to pick | ```{ timepicker: true }```  |
+|startDate      |false | | ```{ timepicker: true }```  |
+|defaultDate    |false | | ```{ timepicker: true }```  |
+|defaultTime    |false | | ```{ timepicker: true }```  |
+|minTime        |false |Minimum time enabled to pick | ```{ timepicker: true }```  |
+|maxTime        |false |Maximum time enabled to pick | ```{ timepicker: true }```  |
+|allowTimes     |[]    |Timepicker will only display these if set | ```{ timepicker: true }```  |
 |opened         |false |Picker is opened by default when true | |
 |inline         |false | | |
 |todayButton    |true  |Display **Today** button shortcut | |
