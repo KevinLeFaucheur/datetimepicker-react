@@ -1,70 +1,195 @@
-# Getting Started with Create React App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+![JAVASCRIPT](javascript.svg) ![REACT](react.svg)
+![node.js](https://img.shields.io/badge/node.js-v16.16.0-green?style=for-the-badge&logo=nodedotjs) ![react](https://img.shields.io/badge/react-18.2.0-18a7d6?style=for-the-badge&logo=react)
 
-## Available Scripts
+---
+## I - Usage and information
 
-In the project directory, you can run:
+### 1. General information
 
-### `npm start`
+The project is about a new start-up bank, **HRNet**, which is trying to break into the industry and needs help setting up its app. We obtained a two-part contract which is broken down into a couple phases:
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### 2. Getting Started with this repository
+1. Clone the repository:
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+   ```sh
 
-### `npm test`
+   git clone https://github.com/KevinLeFaucheur/datetimepicker-react.git
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+   ```
 
-### `npm run build`
+2. Change the current working directory to the cloned project location:
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+   ```sh
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+   cd datetimepicker-react
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+   ```
 
-### `npm run eject`
+3. Install NPM packages:
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+   ```sh
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+   npm i
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+   ```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+4. Runs the app in the development mode:
 
-## Learn More
+   ```sh
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+   npm start
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+   ```
 
-### Code Splitting
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+## II - Usage for another project
 
-### Analyzing the Bundle Size
+#### 1. NPM
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+```sh
+   npm install --save datepicker-p14
+```
 
-### Making a Progressive Web App
+#### 2. Import
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+```js
+import DatePicker from 'datepicker-p14';
+import "datepicker-p14/dist/index.css";
+```
 
-### Advanced Configuration
+#### 3. JSX. 
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+```jsx
+<DatePicker id='start-date' />
+```
 
-### Deployment
+#### 4. Getting the value. 
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+```jsx
+const [value, setValue] = useState();
 
-### `npm run build` fails to minify
+ [...]
+ 
+<DatePicker onChange={(value) => setValue(value)} />
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## II - Examples
+
+#### 1. Locale Example
+
+```JSX
+<DatePicker options={ locale: 'fr' } />
+```
+
+#### 2. Only TimePicker Example
+
+```JSX
+<DatePicker options={ timepicker: true, datepicker: false } />
+```
+
+#### 3. Inline DatePicker Example
+
+```JSX
+<DatePicker options={ inline: true } />
+```
+
+#### 4. allowTimes options TimePicker Example
+
+```JSX
+<DatePicker options={ timepicker: true, allowTimes: ['06:00','12:00','18:00'] } />
+```
+
+#### 5. handler onChangeDateTime Example
+
+```JSX
+<DatePicker options={ onChangeDateTime: () => { } } />
+```
+
+#### 6. minDate and maxDate Example
+
+```JSX
+<DatePicker options={ minDate: '08/01/2023', maxDate: '08/31/2023' } />
+```
+
+#### 7. Dark Theme Example
+
+```JSX
+<DatePicker options={ theme: 'dark' } />
+```
+
+#### 8. Highlighted Date Example
+
+```JSX
+highlightedPeriods: ['date, description, className'] } 
+```
+
+```JSX
+<DatePicker options={ highlightedDates: ['08/25/2023, Birthday, hlCyan'] } />
+```
+
+#### 9. Highlighted Period Example
+
+
+```JSX
+highlightedPeriods: ['startdate, endDate, description, className'] } 
+```
+
+```JSX
+<DatePicker options={ 
+			highlightedPeriods: ['09/01/2023, 09/30/2023, Practice, hlGreen'] } 
+/>
+```
+
+#### 10. 
+
+```JSX
+<DatePicker />
+```
+
+
+## III - Full options list
+
+| Option Name | Default value | Description | Example            |
+| ------------- | -------- | -------- | ----------------------------- |
+|locale         | | | ```{ locale: 'fr' }```  ```  ```|
+|format         |y/m/d h:i |Format date| ```{ format: 'y.d.m' }```  |
+|formatDate     |y/m/d     |Format date, allowed separators: # % ^ * , . " : < > \\ / \| | ```{ formatDate: 'y.d.m' }``` |
+|formatTime     |h:i       |Format time | ```{ formatTime: 'h'i' }```  |
+|step           |60         |timepicker steps, 0 < step <= 60 | ```{ step: 30 }```  |
+|closeOnDateSelect |false |Close picker when choosing a date | ```{ closeOnDateSelect: true }``` |
+|validateOnBlur |true | | ```{ validateOnBlur: false }```  |
+|timepicker     |false |Enable time picking | ```{ timepicker: true }``` |
+|datepicker     |true |Enable date picking  | ```{ datepicker: false }``` |
+|weeks          |false |Show week number, left side of calendar | ```{ weeks: true }``` |
+|theme          |'' |className for alternate color theme, **dark** is supported | ```{ theme: 'dark' }```  |
+|minDate        |false |Minimum date enabled to pick | ```{ minDate: '08/15/2023' }``` |
+|maxDate        |false |Maximum date enbaled to pick | ```{ maxDate: '08/15/2023' }``` |
+|startDate      |false | | ```{ startDate: '08/15/2023' }``` |
+|defaultDate    |false | | ```{ defaultDate: '08/15/2023' }``` |
+|defaultTime    |false | | ```{ defaultTime: '08/15/2023' }``` |
+|minTime        |false |Minimum time enabled to pick | ```{ minTime: '05:00' }``` |
+|maxTime        |false |Maximum time enabled to pick | ```{ maxTime: '21:00' }``` |
+|allowTimes     |[]    |Timepicker will only display these if set | ```{ allowTimes: ['06:00','12:00','18:00'] }```  |
+|opened         |false |Picker is opened by default when true | ```{ opened: true }``` |
+|inline         |false | | ```{ inline: true }``` |
+|todayButton    |true  |Display **Today** button shortcut | ```{ todayButton: false }``` |
+|defaultSelect  |true  | | ```{ defaultTime: false }``` |
+|timepickerScrollbar |true  |Display scroll bar for timepicker | ```{timepickerScrollbar: false }``` |
+|onSelectDate        | | | ```{ onSelectDate: () => { console.log('onSelectDate') } }``` |
+|onChangeMonth       | | | ```{ onChangeMonth: () => { console.log('onChangeMonth') } }``` |
+|onChangeYear        | | | ```{ onChangeYear: () => { console.log('onChangeYear') } }``` |
+|onChangeDateTime    | | | ```{ onChangeDateTime: () => { console.log('onChangeDateTime') } }``` |
+|onShow              | | | ```{ onShow: () => { console.log('onShow') } }``` |
+|onClose             | | | ```{ onClose: () => { console.log('onClose') } }``` |
+|inverseButton       |false |Inverse month and time arrow buttons | ```{ inverseButton: true }``` |
+|scrollMonth         |true |Enable mouse wheel for scrolling months | ```{ scrollMonth: false }``` |
+|scrollTime          |true | | ```{ scrollTime: false }``` |
+|scrollInput         |true | | ```{ scrollInput: false }``` |
+|hours12             |false | | ```{ hours12: true }``` |
+|yearStart           |1950 |Start value for year select | ```{ yearStart: 1900 }``` |
+|yearEnd             |2050 |End value for year select | ```{ yearEnd: 2100 }``` |
+|weekends            |[] | | ```{ weekends: ['08/15/2023','08/16/2023','08/17/2023','08/18/2023'] }``` |
+|disabledDates       |[] |Disable specific dates | ```{ disabledDates: ['08/15/2023','08/16/2023','08/17/2023','08/18/2023'] }``` |
+|allowDates          |[] | | ```{ allowDates: ['08/15/2023','08/16/2023','08/17/2023','08/18/2023'] }``` |
+|disabledWeekDays    |[]  |Disable week days by index, Sun = 0, Sat = 6 | ```{ disabledWeekDays: [0,1,2] }``` |
