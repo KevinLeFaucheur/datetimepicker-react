@@ -1,6 +1,6 @@
-![JAVASCRIPT](./src/assets/badges/javascript.svg)
-![REACT](./src/assets/badges/react.svg)
-<br>
+![JAVASCRIPT](/badges/javascript.svg)
+![REACT](/badges/react.svg)
+</br>
 ![node.js](https://img.shields.io/badge/node.js-v16.16.0-green?style=for-the-badge&logo=nodedotjs)
 ![react](https://img.shields.io/badge/react-18.2.0-18a7d6?style=for-the-badge&logo=react)
 ![react-router](https://img.shields.io/badge/react%20router-6.10.0-red?style=for-the-badge&logo=reactrouter)
@@ -10,7 +10,7 @@
 
 ### 1. General information
 
-![Wealth Health](./src/assets/logo.jpg)
+![Wealth Health](/badges/logo.webp)
 
 **Wealth Health** use an employee managing application called **HRNet**, which has been using jQuery on its front end. This project aims to convert the whole HRNet app to React without any jQuery left. Including converting the plugins for less dependency and more control over their internal use of the application.
 
