@@ -13,6 +13,7 @@
 This project is the conversion of a jQuery plugin datetimepicker into React component.
 The component can be installed as a **npm package** for a React application.
 
+---
 
 ## II. Getting Started with this repository
 
@@ -51,7 +52,7 @@ You may also see any lint errors in the console.
 
 #### 1. NPM
 
-NPM Package: [https://www.npmjs.com/package/datepicker-p14?activeTab=readme]
+NPM Package: (https://www.npmjs.com/package/datepicker-p14?activeTab=readme)
 
 ```sh
    npm install --save datepicker-p14
