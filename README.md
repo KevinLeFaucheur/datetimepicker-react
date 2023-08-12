@@ -10,7 +10,7 @@
 
 ### 1. General information
 
-![Wealth Health](/badges/logo.webp)
+![Wealth Health](/badges/logo_s.png)
 
 **Wealth Health** use an employee managing application called **HRNet**, which has been using jQuery on its front end. This project aims to convert the whole HRNet app to React without any jQuery left. Including converting the plugins for less dependency and more control over their internal use of the application.
 
