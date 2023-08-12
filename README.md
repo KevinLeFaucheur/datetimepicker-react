@@ -3,7 +3,6 @@
 </br>
 ![node.js](https://img.shields.io/badge/node.js-v16.16.0-green?style=for-the-badge&logo=nodedotjs)
 ![react](https://img.shields.io/badge/react-18.2.0-18a7d6?style=for-the-badge&logo=react)
-![react-router](https://img.shields.io/badge/react%20router-6.10.0-red?style=for-the-badge&logo=reactrouter)
 <br>
 
 ---
@@ -22,13 +21,13 @@ The component can be installed as a **npm package** for a React application.
 1. Clone the repository:
 
    ```sh
-   git clone https://github.com/KevinLeFaucheur/project-13-bank-front
+   git clone https://github.com/KevinLeFaucheur/datetimepicker-react.git
    ```
 
 2. Change the current working directory to the cloned project location:
 
    ```sh
-   cd hrnet-react
+   cd datetimepicker-react
    ```
 
 3. Install NPM packages:
@@ -52,7 +51,7 @@ You may also see any lint errors in the console.
 
 #### 1. NPM
 
-NPM Package: (https://www.npmjs.com/package/datepicker-p14?activeTab=readme)
+NPM Package: [datepicker-p14](https://www.npmjs.com/package/datepicker-p14)
 
 ```sh
    npm install --save datepicker-p14
@@ -81,7 +80,7 @@ import 'datepicker-p14/dist/index.css'
    <DatePicker onChange={(value) => setValue(value)} />
 ```
 
-## II - Examples
+## IV - Examples
 
 #### 1. Locale Example
 
@@ -147,13 +146,7 @@ import 'datepicker-p14/dist/index.css'
 />
 ```
 
-#### 10.
-
-```JSX
-   <DatePicker />
-```
-
-## III - Full options list
+## V - Full options list
 
 | Option Name         | Default value | Description                                                | Example                                                                         |
 | ------------------- | ------------- | ---------------------------------------------------------- | ------------------------------------------------------------------------------- |
