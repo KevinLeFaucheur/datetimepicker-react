@@ -1,6 +1,6 @@
 import React from "react";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { ArrowDown, Home, ThinLeft, ThinRight } from "./assets/Icons";
+import { ArrowDown, Calendar, Home, ThinLeft, ThinRight } from "./assets/Icons";
 import { internationalization as i18n } from "./internationalization";
 import { 
   calendarBuilder, formatToDate, formatToTime, getCurrentWeek, 
@@ -11,7 +11,6 @@ import {
 import { TimePicker } from "./TimePicker";
 import "./index.css";
 import { ScrollingContext } from "./ScrollingContext";
-import { Input } from "./Input";
 
 /**
  * 
@@ -22,7 +21,7 @@ export const DatePicker = ({ id, onChange, options }) => {
   */
   const years = useMemo(() => [options?.yearStart ?? 1950, options?.yearEnd ?? 2050].sort(), [options?.yearEnd, options?.yearStart]);
   const yearsRange = useMemo(() => range(years[0], years[1]), [years]);
-  const format = useMemo(() => identifyFormat(options?.format ?? 'd/m/Y h:i'), [options?.format])
+  const format = useMemo(() => identifyFormat(options?.format ?? 'm/d/Y h:i'), [options?.format]);
   
   // Localization
   const locale = options?.locale ?? document.documentElement.lang;
@@ -107,7 +106,9 @@ export const DatePicker = ({ id, onChange, options }) => {
   });
   const [isScrolling, setIsScrolling] = useState(false);
   const [calendar, setCalendar] = useState([]);
+  const [value, setValue] = useState('');
 
+  const inputRef = useRef();
   const datepickerRef = useRef();
 
   /**
@@ -115,11 +116,18 @@ export const DatePicker = ({ id, onChange, options }) => {
    */
   useEffect(() => {
     const date = new Date(selectedDate.year, selectedDate.month, selectedDate.day);
+
+    const d = datepicker ? formatToDate(date, format) : '';
+    const time = timepicker ? ' ' + formatToTime(selectedDate.time, format) : '';
+    setValue(d + time);
+
     if(onChange) onChange(formatToDate(date, format));
     setCalendar(calendarBuilder(date));
-  }, [format, onChange, selectedDate.day, selectedDate.month, selectedDate.year])
+  }, [datepicker, format, onChange, selectedDate.day, selectedDate.month, selectedDate.time, selectedDate.year, timepicker])
   
-  // 
+  /**
+   * Handles closing when clicking outside DatePicker
+   */
   useEffect(() => {
     const close = (e) => {
       if (datepickerRef.current && !datepickerRef.current.contains(e.target) && !isScrolling && !inline) {
@@ -132,7 +140,9 @@ export const DatePicker = ({ id, onChange, options }) => {
     return () => window.removeEventListener('click', close);
   }, [inline, isScrolling, onClose])
 
-  //
+  /**
+   * Toggles DatePicker on clicking input
+   */
   const handleInputClick = () => { 
     setShowDatePicker(!showDatePicker);
 
@@ -140,7 +150,10 @@ export const DatePicker = ({ id, onChange, options }) => {
     if(showDatePicker && onClose) onClose(); 
   };
 
-  //
+  /**
+   * Navigates month to previous if -1, next if 1
+   * @param {number} i - Offset [-1, 1]
+   */
   const handleMonthClick = (i) => {
     let month = selectedDate.month;
     let year = selectedDate.year;
@@ -153,7 +166,10 @@ export const DatePicker = ({ id, onChange, options }) => {
     if(onChangeMonth) onChangeMonth();
   }
 
-  // Scrolling months with mouse wheel if scrollMonth is true
+  /**
+   * Scrolling months with mouse wheel if scrollMonth is true
+   * @param {Event} e   - DOM Event
+   */
   const handleMonthScrollWheel = (e) => {
     if (!scrollMonth) return;
 
@@ -165,7 +181,10 @@ export const DatePicker = ({ id, onChange, options }) => {
     }
   }
 
-  //
+  /**
+   * Sets selected date's month from select
+   * @param {Event} e   - DOM Event
+   */
   const handleMonthChange = (e) => {
     setSelectedDate(o => ({
       ...o,
@@ -174,7 +193,10 @@ export const DatePicker = ({ id, onChange, options }) => {
     if(onChangeMonth) onChangeMonth();
   }
 
-  //
+  /**
+   * Sets selected date's year from select
+   * @param {Event} e   - DOM Event
+   */
   const handleYearChange = (e) => {
     setSelectedDate(o => ({
       ...o,
@@ -183,7 +205,9 @@ export const DatePicker = ({ id, onChange, options }) => {
     if(onChangeYear) onChangeYear();
   }
 
-  // Set selected date to today's
+  /**
+   * Set selected date to today's
+   */
   const handleClickToday = () => {
     setSelectedDate(o => ({
       ...o,
@@ -193,7 +217,10 @@ export const DatePicker = ({ id, onChange, options }) => {
     }));
   }
 
-  // Selecting Date on clicking Calendar TD
+  /**
+   * Set selected date on clicking Calendar's td
+   * @param {Event} e   - DOM Event
+   */
   const handleDateChange = (e) => {
 
     if(e.target.classList.contains('disabled')) return;
@@ -217,30 +244,35 @@ export const DatePicker = ({ id, onChange, options }) => {
     if(onSelectDate) onSelectDate();
   }
 
-  const handleInputOnChange = (value) => {
-    const date = new Date(value);
-    const y = date.getFullYear();
-    const m = date.getMonth();
-    const d = date.getDate();
+  /**
+   * 
+   * @param {*} value 
+   */
+  // const handleInputOnChange = (value) => {
+  //   const date = new Date(value);
+  //   const y = date.getFullYear();
+  //   const m = date.getMonth();
+  //   const d = date.getDate();
 
-    if(date instanceof Date 
-      && y.toString().length === 4 
-      && m.toString().length >= 1 
-      && d.toString().length >= 1) {
+  //   if(date instanceof Date 
+  //     && y.toString().length === 4 
+  //     && m.toString().length >= 1 
+  //     && d.toString().length >= 1) {
 
-      setSelectedDate(o => ({
-        ...o,
-        year : parseInt(y),
-        month: parseInt(m),
-        day: parseInt(d)
-      }));
-      setCalendar(calendarBuilder(date));
-    }
+  //     setSelectedDate(o => ({
+  //       ...o,
+  //       year : parseInt(y),
+  //       month: parseInt(m),
+  //       day: parseInt(d)
+  //     }));
+  //     setCalendar(calendarBuilder(date));
+  //   }
+  //   if(onChange) onChange(formatToDate(date, format));
+  // }
 
-    if(onChange) onChange(formatToDate(date, format));
-  }
-
-  // 
+  /**
+   * Save Selected Button
+   */
   const handleSaveSelected = () => {
     const date = new Date(selectedDate.year, selectedDate.month, selectedDate.day);
     if(onChange) onChange(formatToDate(date, format));
@@ -253,8 +285,24 @@ export const DatePicker = ({ id, onChange, options }) => {
     if(onSelectDate) onSelectDate();
   }
 
-  // 
+  /**
+   * Sets selectedDate when input loses focus
+   * Updates DatePicker's onChange value if validateOnBlur is true
+   */
   const handleValidateOnBlur = () => {
+    const date = new Date(value);
+    // console.log(date);
+
+    if(!isNaN(Date.parse(date))) {      
+      setSelectedDate(o => ({
+        ...o,
+        year : date.getFullYear(),
+        month: date.getMonth(),
+        day: date.getDate()
+      }));
+      setCalendar(calendarBuilder(date));
+    }
+
     if(validateOnBlur) {
       const date = new Date(selectedDate.year, selectedDate.month, selectedDate.day); 
       if(onChange) onChange(formatToDate(date, format));
@@ -262,15 +310,42 @@ export const DatePicker = ({ id, onChange, options }) => {
     }
   }
 
+  /**
+   * Sets input's value either from typing or using the picker
+   * @param {Event} e  - DOM Event
+   * @returns {string} - Formatted date and time to display
+   */
+  const handleInputValue = (e) => {
+    if(e) {
+      if(e.type === "change") {
+        // console.log(e.currentTarget.value);
+        setValue(e.currentTarget.value);
+        return e.currentTarget.value;
+      }
+    }
+    if(inputRef.current === document.activeElement) {
+      return value;
+    };
+
+    const date = datepicker ? formatToDate(new Date(selectedDate.year, selectedDate.month, selectedDate.day), format) : '';
+    const time = timepicker ? ' ' + formatToTime(selectedDate.time, format) : '';
+    return date + time;
+  }
+
   return (
     <div id={`${id}-container`} className="datepicker-container" ref={datepickerRef} >  
-      {!inline && <Input
-        value={(datepicker ? formatToDate(new Date(selectedDate.year, selectedDate.month, selectedDate.day), format) : '') + (timepicker ? ' ' + formatToTime(selectedDate.time, format) : '')} 
-        placeholder={new Date(defaultDate).toLocaleDateString()} 
-        onClick={handleInputClick} 
-        onChange={(e) => handleInputOnChange(e.currentTarget.value)} 
-        theme={theme}
-      />}
+
+      {!inline && <div className={`datepicker-input ${theme ? theme : ''}`}>
+        <input 
+          ref={inputRef}
+          value={handleInputValue()}
+          onClick={handleInputClick} 
+          placeholder={new Date(defaultDate).toLocaleDateString()} 
+          onChange={(e) => handleInputValue(e)} 
+          onBlur={handleValidateOnBlur}
+        />
+        <div className="datepicker-icon"><Calendar /></div>
+      </div>}
       
       {(showDatePicker || inline) && <div id={`${id}-menu`} className={`datepicker-menu ${theme ? theme : ''} ${inline ? 'inline' : ''}`} onBlur={handleValidateOnBlur}>
         {datepicker && <div className="datepicker-calendar">
